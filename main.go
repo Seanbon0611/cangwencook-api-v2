@@ -1,18 +1,29 @@
 package main
 
 import (
+	"fmt"
+
+	"os"
+
 	"github.com/gin-gonic/gin"
-	// "github.com/jinzhu/gorm"
-	// _ "github.com/jinzhu/gorm/dialects/postgres"
-	// "os"
-	// "github.com/joho/godotenv"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
 )
 
+//function that is able to get data from .env file
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println(err)
+	}
+	return os.Getenv(key)
+}
 func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
+	server := gin.Default()
+
+	server.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "Hello World!",
+			"message": "OK",
 		})
 	})
 	// db, err := gorm.Open("postgres", "host=localhost port=5431 user=postgres dbname=test_db sslmode=disable")
@@ -22,5 +33,7 @@ func main() {
 	// }
 	// fmt.Println("Database Connected")
 	// defer db.Close()
-	r.Run()
+
+	//starts server
+	server.Run(":3001")
 }
